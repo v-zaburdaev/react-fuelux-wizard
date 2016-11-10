@@ -15,11 +15,8 @@ Using Wizard
   nextBtnTextFinish="Complete"
   onFinish={this.onFinish.bind(this)}
   onNextPageClick={this.handleOnNextPageClick.bind(this)}>
-  <WizardStep badge={1} title="Поверяемое оборудование"><Page1/></WizardStep>
-  <WizardStep badge={2} title="Эталоны"><Page2/></WizardStep>
-  <WizardStep badge={3} title="Влияющие факторы"><Page3/></WizardStep>
-  <WizardStep badge={4} title="Параметры шаблона"><Page4/></WizardStep>
-  <WizardStep badge={5} title="Подписи"><Page5/></WizardStep>
-  <WizardStep badge={6} title="Файлы"><Page6/></WizardStep>
-</Wizard>```
+  <WizardStep badge={1} title="Page one"><Page1/></WizardStep>
+  <WizardStep badge={2} title="Page two"><Page2/></WizardStep>
+  <WizardStep badge={3} title="Page three"><Page3/></WizardStep>
+  </Wizard>```
           
