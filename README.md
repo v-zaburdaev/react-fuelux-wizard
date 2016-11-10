@@ -2,9 +2,10 @@
 A React version of Fuel UX Wizard control
 
 At first of all i want to say thanks for this component to creators of fuel ux. 
-http://getfuelux.com/javascript.html
+http://getfuelux.com/javascript.html#wizard
 
-Using Wizard
+
+ Using Wizard
 
 ```jsx
 <Wizard 
