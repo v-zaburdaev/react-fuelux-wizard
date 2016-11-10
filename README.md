@@ -1,7 +1,7 @@
 # react-fuelux-wizard
 A React version of Fuel UX Wizard control
 
-At first of all i want to say thanks for this component to creators of fuel ux. 
+At first of all i want say thanks for this component to creators of fuel ux. 
 http://getfuelux.com/javascript.html#wizard
 
 
