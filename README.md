@@ -6,7 +6,8 @@ http://getfuelux.com/javascript.html
 
 Using Wizard
 
-`<Wizard 
+```jsx
+<Wizard 
   id="wizard" 
   defaultActiveKey={1}
   prevBtnText="Previous Button"
@@ -20,5 +21,5 @@ Using Wizard
   <WizardStep badge={4} title="Параметры шаблона"><Page4/></WizardStep>
   <WizardStep badge={5} title="Подписи"><Page5/></WizardStep>
   <WizardStep badge={6} title="Файлы"><Page6/></WizardStep>
-</Wizard>`
+</Wizard>```
           
