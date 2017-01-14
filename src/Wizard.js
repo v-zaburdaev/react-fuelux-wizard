@@ -11,6 +11,8 @@ class Wizard extends React.Component {
         pages:props.children,
         completepages:[],
         maxpage:0,
+        nextBtnTextArray:props.nextBtnTextArray || {},
+//        prevBtnTextArray:[],
         prevBtnText:props.prevBtnText|| "Prev",
         nextBtnText:props.nextBtnText|| "Next",
         nextBtnTextDefault:props.nextBtnText|| "Next",
@@ -22,27 +24,55 @@ class Wizard extends React.Component {
       this.pageClick = this.pageClick.bind(this);
       this.nextBtn = this.nextBtn.bind(this);
       this.popstate = this.popstate.bind(this);
+      this.getNextBtnText = this.getNextBtnText.bind(this);
+      this.state.nextBtnText = this.getNextBtnText(this.state.active);
+
     }
 
 
     onNextClick(){
       let activepage=this.state.active;
-      let nextBtnText=this.state.nextBtnTextDefault;
+      let validated=true;
       let completepages=this.state.completepages;
       completepages[activepage-1] = "complete";
       if(activepage===this.state.pages.length){
         if(_.isFunction(this.props.onFinish)) this.props.onFinish();
       }
       if (_.isFunction(this.props.onNextPageClick)){
-        this.props.onNextPageClick(activepage);
+        validated=this.props.onNextPageClick(activepage);
       }
-      if(activepage<this.state.pages.length) activepage+=1;
-        if(activepage===this.state.pages.length){
-          nextBtnText=this.state.nextBtnTextFinish;
-        }
-        window.history.pushState({},"","#step"+activepage);
-        this.setState({active:activepage, nextBtnText:nextBtnText, completepages: completepages});
+      if(validated && activepage<this.state.pages.length){ activepage+=1; }
+      let nextBtnText = this.getNextBtnText(activepage);
+      window.history.pushState({},"","#step"+activepage);
+      this.setState({active:activepage, nextBtnText:nextBtnText, completepages: completepages});
+      if(_.isFunction(this.props.onUpdate)) this.props.onUpdate(activepage);
+
     }
+
+    getNextBtnText(activepage){
+      let nextBtnText=this.state.nextBtnTextDefault;
+      let nextBtnTextArray;
+      if(_.isFunction(this.state.nextBtnTextArray)){
+        nextBtnTextArray=this.state.nextBtnTextArray();
+      } else if (_.isObject(this.state.nextBtnTextArray)) {
+        nextBtnTextArray=this.state.nextBtnTextArray;
+      }
+      if(_.isObject(nextBtnTextArray)) {
+          if(this.state.nextBtnTextArray.hasOwnProperty(activepage)){
+            nextBtnText=this.state.nextBtnTextArray[activepage];
+          }
+        } else {
+          if(activepage===this.state.pages.length){
+            nextBtnText=this.state.nextBtnTextFinish;
+          }
+      }
+      return nextBtnText;
+    }
+    getPrevBtnText(activepage){
+      //let BtnText=this.state.nextBtnTextDefault;
+      return ;
+    }
+
     componentDidMount(){
       //let completepages=[];
       let completepages = React.Children.map(this.state.pages,(child,idx)=>{
@@ -57,13 +87,17 @@ class Wizard extends React.Component {
       console.log(e.target.location.hash);
       let activepage = Number(e.target.location.hash.replace(/\#step/, ""));
       this.setState({active:activepage});
+      if(_.isFunction(this.props.onUpdate)) this.props.onUpdate(activepage);
 
     }
     onPrevClick(){
       let activepage=this.state.active;
       let nextBtnText=this.state.nextBtnTextDefault;
       if(activepage>1) activepage-=1;
+      nextBtnText=this.getNextBtnText(activepage);
       this.setState({active:activepage, nextBtnText: nextBtnText});
+      if(_.isFunction(this.props.onUpdate)) this.props.onUpdate(activepage);
+
     }
     componentDidUpdate(){
       var totalWidth = 0;
@@ -100,6 +134,8 @@ class Wizard extends React.Component {
       let a = e.target.getAttribute("data-target");
       let activepage = Number(a.replace(/\#step/, ""));
       this.setState({active:activepage});
+      if(_.isFunction(this.props.onUpdate)) this.props.onUpdate(this.state.active);
+
 
     }
     nextBtn(){
@@ -160,6 +196,7 @@ Wizard.PropTypes =  {
     nextBtnText: React.PropTypes.string,
     nextBtnText: React.PropTypes.string,
     nextBtnTextFinish: React.PropTypes.string,
+    nextBtnTextArray: React.PropTypes.object,
     onFinish: React.PropTypes.func,
     onNextPageClick: React.PropTypes.func,
     onPrevPageClick: React.PropTypes.func,
